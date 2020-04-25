@@ -4,12 +4,13 @@ const express = require('express'),
       jwt     = require('jsonwebtoken'),
       keys    = require('../../config/keys');
 
-// Load input validation
-const validateRegisterInput = require('../../validation/register');
-const validateLoginInput = require('../../validation/login');
 
 // Load User model
 const User = require('../../models/User');
+
+// Load input validation
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
 
 /**
@@ -76,10 +77,10 @@ router.post('/login', (req, res) => {
         password  = req.body.password;
 
   // Check is user exists in DB via email
-  User.findOne({ email: email })
+  User.findOne({ email })
     .then(user => {
       if(!user) {
-        return res.status(404).json({ emailnotfound: 'Email not found'});
+        return res.status(404).json({ emailnotfound: 'Email not found' });
       }
 
       // Check if password submitted by client matches hashed password in DB
@@ -91,12 +92,13 @@ router.post('/login', (req, res) => {
               id: user.id,
               name: user.name
             };
-            // Sign the token
+            
+            // Signing the JWT
             jwt.sign(
               payload, 
               keys.secretOrKey, 
               {
-                expiresIn: 31556926 // 1 year in seconds
+                expiresIn: 31556926 // 1 year in seconds from now is when the token expires
               }, 
               (err, token) => {
                 if(err) {
@@ -117,5 +119,5 @@ router.post('/login', (req, res) => {
     });
 });
 
-// Modularity of REST endpoints
+// Modularity of API endpoints
 module.exports = router;
