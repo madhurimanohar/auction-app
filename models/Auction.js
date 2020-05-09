@@ -28,8 +28,14 @@ const AuctionSchema = new Schema ({
     required: true
   },
   currentBidder: {
-    type: String,
-    default: 'dummyUser',
+    id: {
+      type: String,
+      default: 'dummyID',
+    },
+    name: {
+      type: String,
+      default: 'dummyUser'
+    }
   },
   hasBuyItNow: {
     type: Boolean,
@@ -42,11 +48,19 @@ const AuctionSchema = new Schema ({
     type: String,
     required: true
   },
-  dateCreated: {
+  creationDate: {
     type: Date,
     default: Date.now
+  },
+  // Materialize.css string inputs --> JS date object --> BSON native date object in Mongo
+  endingDate: {
+    type: Date,
+    required: true
   }
 });
+
+// Text Indexing for queries via search bar
+AuctionSchema.index({ title: "text", description: "text" });
 
 const Auction = mongoose.model("auctions", AuctionSchema);
 module.exports = Auction;

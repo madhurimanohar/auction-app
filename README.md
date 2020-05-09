@@ -18,8 +18,12 @@ With npm-scripts *(located in ./package.json)*, installing the dependencies on b
 $ npm install
 $ npm run client-install
 ```
+Because some of the scripts use [nodemon](https://github.com/remy/nodemon) to start servers, it will have to be installed separately as a devDependency:
+```shell
+$ npm i nodemon --save-dev
+```
 ### Starting Servers Concurrently
-Leveraging [concurrently](https://github.com/kimmobrunfeldt/concurrently) v5.1.0 allows both the Express server and React application to be started concurrently (i.e., without needing two terminals) from the root directory. 
+Leveraging [concurrently](https://github.com/kimmobrunfeldt/concurrently) v5.1.0 allows both the Express server and React application to be started concurrently (i.e., without needing two terminals) from the root directory: 
 ```shell
 $ npm run dev
 ```
@@ -32,6 +36,6 @@ Likewise, the React application can be started individually as well:
 $ npm run client
 ```
 
-## Project Architecture
+<!-- ## Project Architecture
 User stories and business logic can be inferred from this UI Transition Diagram:
-<img src='https://i.imgur.com/HjcudXg.jpg' title='UIDiagram' width='' alt=''/>
+<img src='https://i.imgur.com/HjcudXg.jpg' title='UIDiagram' width='' alt=''/> -->

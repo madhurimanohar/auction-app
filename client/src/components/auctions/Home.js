@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import M from 'materialize-css/dist/js/materialize.min.js';
-// import mockPic from '../../images/mario_king.jpg';
 
 // Home component aggregates UtilityNavbar component
-import UtilityNavbar from './UtilityNavbar'
+import UtilityNavbar from '../dashboard/UtilityNavbar'
 
 
 class Home extends Component {
@@ -20,8 +19,10 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    // Will either be empty string or the actual queryString
+    const queryString = this.props.location.search; 
     axios
-      .get('/api/auctions')
+      .get(`/api/auctions/${queryString}`)
       .then(res => {
         const allAuctions = res.data;
         console.log(allAuctions)
@@ -32,22 +33,27 @@ class Home extends Component {
     M.AutoInit();
   }
 
+  componentWillReceiveProps() {
+    // When component is re-rendered, refresh to ensure latest data is rendered as well as checking for query params
+    window.location.reload();
+  }
+
 
   render() {
     return (
       <div>
         {/* Utility navbar for users only */}
-        <UtilityNavbar />
+        <UtilityNavbar history={this.props.history}/>
         
-        {/* Home-feed */}
+        {/* Home-Feed of auction thumbnails */}
         <section className='row container'>
 
-          {this.state.auctions.map(auction => (
+          {this.state.auctions.slice(0).reverse().map(auction => (
             <Link to={`/auctions/${auction._id}`} className='black-text' key={auction._id}>
-              <div className='col s3'>
+              <div className='col m3'>
                 <div className='card small'>
                   <div className='card-image'>
-                    <img src={`/${auction.productImage}`} className='responsive-img'alt=''></img>
+                    <img src={`/${auction.productImage}`} className='responsive-img' alt=''></img>
                   </div>
                   <div className='card-content'>
                     <span className='card-title' style={{fontSize:'1.1rem', fontWeight:'440'}}>

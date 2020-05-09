@@ -38,3 +38,9 @@
 } */
 
 /* html { margin-left: calc(100vw - 100%); } */
+
+
+/* ~~~~ CUSTOM CSS ~~~~ */
+.sidenav-overlay {
+  background-color: transparent;
+}

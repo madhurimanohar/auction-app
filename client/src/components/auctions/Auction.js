@@ -21,8 +21,8 @@ class Auction extends Component {
       buyItNow: 0.00,
       productImage: '',
       newBid: 0.00, // newBid needs its own state
+      endingDate: '',
       errors: {}
-      // TODO: add auctionEndingDate field
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,7 +44,8 @@ class Auction extends Component {
           currentBidder: auction.currentBidder,
           hasBuyItNow: auction.hasBuyItNow,
           buyItNow: auction.buyItNow,
-          productImage: auction.productImage
+          productImage: auction.productImage,
+          endingDate: auction.endingDate
         });
       });
       // jQuery and JS for materialize.css
@@ -73,10 +74,11 @@ class Auction extends Component {
     event.preventDefault(); 
     const { auctionID } = this.props.match.params;
     const newBidData = { 
-      newBidder: this.props.auth.user.id, 
+      newBidderID: this.props.auth.user.id, 
+      newBidderName: this.props.auth.user.name,
       newBid: this.state.newBid 
     };
-    // todo: use the redux action
+
     this.props.placeBid(auctionID, newBidData);
   }
 
@@ -94,10 +96,11 @@ class Auction extends Component {
           </div>
           <div className='col m7'>
             <h3><b>{this.state.title}</b></h3>
+            <p><b><i className='material-icons'>person_outline</i> Seller: </b> {this.state.author.name}</p>
             <blockquote>{this.state.description}</blockquote>
             <h5><b>Current bid:</b> <i className='material-icons'>attach_money</i>{this.state.currentBid}</h5>
             
-            {/* Todo: write post route for a bid */}
+            {/* Form: PUT route for a bid */}
             <form noValidate onSubmit={this.handleSubmit}>
               <div className="input-field col m7">
                 <i className="material-icons prefix">attach_money</i>
@@ -112,7 +115,7 @@ class Auction extends Component {
                 />
                 <label htmlFor="bid">Bid amount</label>
                 <span className="helper-text">Enter at least ${this.state.currentBid + 1} or more to bid</span>
-                <span className="red-text">{errors.newBid}</span>
+                <span className="red-text" style={{paddingLeft: '3rem'}}>{errors.newBid}</span>
               </div>
               {/* submit button */}
               <div className='col m2' style={{ paddingLeft: '11.25px'}}>
@@ -129,8 +132,8 @@ class Auction extends Component {
                   Place Bid
                 </button>
               </div>
-
             </form>
+            
           </div>
         </div>
       </div>

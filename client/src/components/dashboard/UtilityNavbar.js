@@ -7,13 +7,36 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 import mockPic from '../../images/mario_king.jpg';
 
-
+/* This component is a navbar with utility functions only avail to auth'd users */
 class UtilityNavbar extends Component {
+  constructor() {
+    super();
+    this.state = {
+      query: ''
+    };
+    // Binding 'this' context for event handlers
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   componentDidMount() {
-    // let sidenav = document.querySelector('#slide-out');
-    // M.Sidenav.init(sidenav, {});
     M.AutoInit();
+  }
+
+  /* Event Handlers */
+  handleChange(event) {
+    this.setState({ [event.target.id]: event.target.value })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // URLSearchParams is available in all modern browsers
+    const queryString = new URLSearchParams({ search: this.state.query }).toString();
+    // Redirects to 'home' route with a query parameter
+    this.props.history.push({
+      pathname: '/auctions',
+      search: queryString
+    })
   }
 
   onLogoutClick = (event) => {
@@ -30,10 +53,10 @@ class UtilityNavbar extends Component {
         <section className='row'>
           <div className='navbar-fixed'>
             <nav className='grey lighten-4'>
-              <Link to='' data-target='slide-out' className='sidenav-trigger show-on-large hoverable'>
-                  <i style={{ color: '#000'}} className='material-icons'>person</i>
-                  {user.name}
+              <Link to='' data-target='slide-out' className='sidenav-trigger show-on-large'>
+                <i style={{ color: '#000'}} className='material-icons'>person</i>
               </Link>
+              
               <div className='nav-wrapper container'>
                 <ul id='nav-mobile' className='left hide-on-med-and-down'>
                   <li><Link to='/auctions'className='black-text'>home</Link></li>
@@ -43,15 +66,27 @@ class UtilityNavbar extends Component {
                       <i className='material-icons right'>arrow_drop_down</i>
                     </Link>
                   </li>
-                  <li>
-                  {/* !! Search bar here !! */}
+                  {/* Search Bar for queries */}
+                  <li style={{ width: '26rem', paddingLeft: '1rem' }}>
+                    <form noValidate onSubmit={this.handleSubmit} >
+                      <div className='input-field' className=''>
+                        <input 
+                          onChange={this.handleChange}
+                          value={this.state.query}
+                          id='query'
+                          type='text' 
+                          placeholder='🔎 Search for an item...'
+                          style={{paddingLeft: '1rem', background: '#ffffff', borderRadius: '25px'}}
+                        />
+                      </div>
+                    </form>
                   </li>
                 </ul> 
                 <ul id='nav-mobile' className='right hide-on-med-and-down'>
                   <li>
                     <Link to='/auctions/new' 
                       className='btn waves-effect waves-light hoverable blue lighten-3 black-text'>
-                      Post Bidding <i className="material-icons right">add</i>
+                      Post Auction <i className="material-icons right">add</i>
                     </Link>
                   </li>
                 </ul>
@@ -64,7 +99,7 @@ class UtilityNavbar extends Component {
             <li>
               <div className='user-view'>
                 <div className='background grey lighten-4'></div>
-                <Link to='/profile'><img className='circle' src={mockPic} alt=''></img></Link>
+                <Link to=''><img className='circle' src={mockPic} alt=''></img></Link>
                 <Link to=''><span className='black-text name'>{user.name}</span></Link>
                 <Link to=''><span className='black-text email'>@GoodSeller</span></Link>
               </div>
@@ -73,8 +108,9 @@ class UtilityNavbar extends Component {
             <li><Link to='' className='subheader'>eCommerce</Link></li>
             <li><div className='divider'></div></li>
 
-            <li><Link to='item2'><i className='material-icons'>local_atm</i>Bids/Offers</Link></li>
-            <li><Link to='item3'><i className='material-icons'>shopping_cart</i>Won Bids/Purchased</Link></li>
+            <li><Link to='/user/my-auctions'><i className='material-icons'>person_outline</i>My Auctions</Link></li>
+            <li><Link to='/user/my-bids'><i className='material-icons'>local_atm</i>My Bids</Link></li>
+            <li><Link to='/user/my-cart'><i className='material-icons'>shopping_cart</i>My Won Bids/Cart</Link></li>
             <li><Link to='item1'><i className='material-icons'>mail_outline</i>Messages</Link></li>
 
             <li><Link to='' className='subheader'>Account Settings</Link></li>
