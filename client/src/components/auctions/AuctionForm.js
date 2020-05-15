@@ -158,21 +158,40 @@ class AuctionForm extends Component {
                 <label htmlFor='description'>Description</label>
                 <span className='red-text'>{errors.description}</span>
               </div>
-              {/* starting bid input field */}
-              <div className='input-field col s4'>
+              {/* conditional render: starting bid input field */}
+              {!this.state.hasBuyItNow && <div className='input-field col s4'>
                 <i className='material-icons prefix'>attach_money</i>
                 <input 
                   onChange={this.handleChange}
                   id='startingBid'
                   type='number'
-                  placeholder='0.00'
+                  placeholder=''
+                  onFocus={(e) => e.target.placeholder='0.00'}
+                  onBlur={(e) => e.target.placeholder=''}
                   className={classnames('', {
                     invalid: errors.startingBid
                   })}
                 />
                 <label htmlFor='startingBid'>Starting Bid</label>
                 <span className='red-text'>{errors.startingBid}</span>
-              </div>
+              </div>}
+              {/* conditional render: buyItNow price input field */}
+              {this.state.hasBuyItNow && <div className='input-field col s4'>
+                <i className='material-icons prefix'>attach_money</i>
+                <input 
+                  onChange={this.handleChange}
+                  id='buyItNow'
+                  type='number'
+                  placeholder=''
+                  onFocus={(e) => e.target.placeholder='0.00'}
+                  onBlur={(e) => e.target.placeholder=''}
+                  className={classnames('', {
+                    invalid: errors.buyItNow
+                  })}
+                />
+                <label htmlFor='startingBid'>Buy It Now Price</label>
+                <span className='red-text'>{errors.startingBid}</span>
+              </div>}
               {/* Buy it now toggle */}
               <div className="switch col s4">
                 <label>Buy it now: </label>
@@ -238,7 +257,7 @@ class AuctionForm extends Component {
                   />
                 </div>
                 <div className="file-path-wrapper">
-                  <input disabled className="file-path validate" type="text" placeholder="Upload one or more images" />
+                  <input disabled className="file-path" type="text" placeholder="Upload one or more images" />
                 </div>
               </div>
 
